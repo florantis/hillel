@@ -13,7 +13,7 @@ class User():
         self.course = ""
         self.grade = None
 
-    def chose_course(self, course):
+    def choose_course(self, course):
         self.course = course 
 
     def get_grade(self, grade):
@@ -24,7 +24,7 @@ user = User()
 
 @app.route("/")
 def show_info():
-    if not user.name:
+    if not user.name:   # if the user's name is None (the user hasn't logged in)
         return f"""
             <h3>{"Please, log in!"} </h3>
             <form action="/login" method="POST">
@@ -37,15 +37,17 @@ def show_info():
                 <button>Log in!</button>
             </form>    
     """
-    if not user.course:
+    if not user.course:    # if the user hasn't chosen the course
         return f"""<h3>The current user is {user.name}, 
-        the language you are going to learn is {user.language}"""
+        the language you are going to learn is {user.language}
+        <form action="/choose_course" method="POST"> <button>Choose course!</button> </form>"""
     
-    if not user.grade:
+    if not user.grade:    # if the user hasn't got a grade
         return f"""<h3>The current user is {user.name}, 
             the course you are taking is {user.language} {user.course}.</h3>
             <form action="/grade" method="POST"> <button>Let's discover your grade!</button> </form>"""
     
+    # else this:
     return f"""<h3>The current user is {user.name}, 
         the course you are taking is {user.language} {user.course} and your grade is {user.grade}.</h3>"""
     
@@ -90,9 +92,9 @@ def choose_course():
     </form>
     """
 
-@app.route("/course_choosed", methods=["POST"])
+@app.route("/course_choosed", methods=["POST"]) # I need this page to assign the grade and redirect the user to the main page
 def course_ok():
-    user.course = request.form.get('course')
+    user.choose_course(request.form.get('course')) 
     return f"""
     <h3>Course is chosen successfully!</h3>
     <a href="/">Return to the HOME page</a>
@@ -100,7 +102,7 @@ def course_ok():
 
 @app.route("/grade", methods=["POST"])
 def grade():
-    user.grade = randint(1, 100)
+    user.get_grade(randint(1, 100))
     return f"""
     <h3>Your teacher decided that your grade should be {user.grade}!</h3>
     {"Congratulations!" if user.grade >= 60 else "You could do better."}
@@ -110,26 +112,3 @@ def grade():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, debug=True)
-
-
-"""
-HTTP Status Codes
-Informational responses (100 – 199)
-Successful responses (200 – 299)
-200 OK
-201 Created
-202 Accepted
-Redirection messages (300 – 399)
-301 Moved Permanently
-Client error responses (400 – 499)
-400 Bad Request
-401 Unauthorized
-403 Forbidden
-404 Not Found
-405 Method Not Allowed
-408 Request Timeout
-429 Too Many Requests
-Server error responses (500 – 599)
-500 Internal Server Error
-501 Not Implemented
-"""
