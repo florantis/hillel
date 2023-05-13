@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     path('login/', views.login, name="login"),
     path('choose_course/', views.choose_course, name="choose_course"),
-    path('course_choosed/', views.course_ok, name="course_chosen"),
+    path('choose_course/done/', views.course_ok, name="course_chosen"),
     path('grade/', views.grade, name="grade"),
     path('', views.index, name="index" ),
 ]

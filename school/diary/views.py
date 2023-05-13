@@ -32,17 +32,14 @@ def index(request):
             </div>
                 <button>Log in!</button>
             </form>""")
-    
     if not user.course:    # if the user hasn't chosen the course
         return HttpResponse(f"""<h3>The current user is {user.name}, 
-        the language you are going to learn is {user.language}
-        <form action="choose_course/" method="POST"> <button>Choose course!</button> </form>""")
-    
+            the language you are going to learn is {user.language}
+            <form action="choose_course/" method="POST"> <button>Choose course!</button> </form>""")
     if not user.grade:    # if the user hasn't got a grade
         return HttpResponse(f"""<h3>The current user is {user.name}, 
             the course you are taking is {user.language} {user.course}.</h3>
             <form action="grade/" method="POST"> <button>Let's discover your grade!</button> </form>""")
-    
     # else this:
     return HttpResponse(f"""<h3>The current user is {user.name}, 
         the course you are taking is {user.language} {user.course} and your grade is {user.grade}.</h3>""")
@@ -54,22 +51,19 @@ def login(request):
     if not request.POST:
         return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
             <a href="/">\nReturn to the HOME page</a>""")
-
     # Validating username
     for char in request.POST.get('username'):
         if char not in ascii_letters and char != " ":
             return HttpResponse("""<h3>Sorry, but the name you entered is invalid!</h3> 
-            <a href="/">\nReturn to the HOME page</a>""")
-    
+             <a href="/">\nReturn to the HOME page</a>""")
     # Validating language
     for char in request.POST.get('language'):
         if not str.isascii(char) and char != " ":
             return HttpResponse("""<h3>Sorry, but the language you entered is invalid!</h3>  
-            <a href="/">\nReturn to the HOME page</a>""")
+              <a href="/">\nReturn to the HOME page</a>""")
         
-    username = request.POST.get('username').title()
+    username = request.POST.get('username').title() # Make it so the names users enter are CAPSed right 
     language = request.POST.get('language')
-         
     user.name = username
     user.language = language
 
@@ -86,14 +80,17 @@ def login(request):
 
 
 def choose_course(request):
+    if not user.name:   # if the user's name is None (the user hasn't logged in)
+        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
+            <a href="/">\nReturn to the HOME page</a>""")
+    
     return HttpResponse(f"""
     <h3>Choose the course for {user.language}!</h3>
-    <form action="/course_choosed/" method="POST">
+    <form action="done/" method="POST">
         <input type="radio" id="basic" name="course" value="Basic">
         <label for="basic">Basic</label><br>
         <input type="radio" id="pro" name="course" value="Pro">
         <label for="pro">Pro</label><br>
-
         <button>Choose!</button>
     </form>
     """)
@@ -101,6 +98,10 @@ def choose_course(request):
 
 # I need this view to assign the grade and redirect the user to the main page
 def course_ok(request):
+    if not user.name:   # if the user's name is None (the user hasn't logged in)
+        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
+            <a href="/">\nReturn to the HOME page</a>""")
+    
     user.set_course(request.POST.get('course')) 
     return HttpResponse(f"""
     <h3>Course is chosen successfully!</h3>
@@ -109,6 +110,10 @@ def course_ok(request):
 
 
 def grade(request):
+    if not user.name:   # if the user's name is None (the user hasn't logged in)
+        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
+            <a href="/">\nReturn to the HOME page</a>""")
+    
     user.get_grade(randint(1, 100))
     return HttpResponse(f"""
     <h3>Your teacher decided that your grade should be {user.grade}!</h3>
