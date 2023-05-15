@@ -7,3 +7,6 @@ class Student(models.Model):
     course = models.CharField(max_length=10)
     grade = models.IntegerField()
     
+class WeekDay(models.Model):
+    title = models.CharField(max_length=20)
+    note = models.CharField(max_length=250)
