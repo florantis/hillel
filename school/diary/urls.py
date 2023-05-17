@@ -24,4 +24,8 @@ urlpatterns = [
     path('choose_course/done/', views.course_ok, name="course_chosen"),
     path('grade/', views.grade, name="grade"),
     path('', views.index, name="index" ),
+
+    path('my_week/', views.show_week, name="week"),
+    path('my_week/day/<int:day>/', views.show_day, name="day_notes"),
+    path('my_week/day/<int:day>/note/<int:note_id>/', views.show_note, name="note"),
 ]

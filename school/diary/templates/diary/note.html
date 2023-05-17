@@ -1,0 +1,6 @@
+{% extends 'general/base.html' %}
+
+{% block title_appendex %} - Note "{{note.title}}" {% endblock title_appendex %}
+
+{% block title %}{{note.title}}{% endblock title %}
+{% block contents %}{{note.msg}}{% endblock contents %} 

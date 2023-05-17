@@ -9,4 +9,11 @@ class Student(models.Model):
     
 class WeekDay(models.Model):
     title = models.CharField(max_length=20)
-    note = models.CharField(max_length=250)
+
+    def __str__(self) -> str:
+        return self.title
+
+class Note(models.Model):
+    day = models.ForeignKey("WeekDay", on_delete=models.CASCADE)
+    title = models.CharField(max_length=25)
+    msg = models.CharField(max_length=256)

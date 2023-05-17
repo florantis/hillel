@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bibell School{% block title_appendex %}{{title_appendex}}{% endblock title_appendex %}</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Bibell School</h1>
+        <p><a href="/">Home page</a>- - - -<a href="/my_week/">Diary</a>
+    <hr>
+    </div>
+    <h2>{% block title %}{{title}}{% endblock title %}</h2>
+    {% block contents %} {{contents}} {% endblock contents %}
+</body>

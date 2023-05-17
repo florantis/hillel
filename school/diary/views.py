@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, Http404
+from django.core.exceptions import ObjectDoesNotExist
 from random import randint
-
+from .models import WeekDay, Note
 # Since I still don't know how to operate with DBs properly, I use this class as a temporal solution
 class Student():
     def __init__(self, name = None, language = None):
@@ -22,6 +23,12 @@ user = Student()
 def index(request):
     if not user.name:   # if the user's name is None (the user hasn't logged in)
         return HttpResponse(f"""
+            <div class="header">    
+                <h1>Bibell School</h1>
+                <p><a href="/">Home page</a>- - - -<a href="/my_week/">Diary</a>
+            <hr>
+            </div>
+
             <h3>{"Please, log in!"} </h3>
             <form action="login/" method="POST">
             <div>
@@ -49,21 +56,24 @@ def login(request):
     from string import ascii_letters
 
     if not request.POST:
-        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
-            <a href="/">\nReturn to the HOME page</a>""")
+        return render(request, 'reg_log/please_login.html')
+    
+    username = request.POST.get('username').title() # Make it so the names users enter are CAPSed right 
+    language = request.POST.get('language')
+    
     # Validating username
-    for char in request.POST.get('username'):
+    if username == "":
+        return HttpResponse("""<h3>Sorry, but the name you entered is invalid!</h3> 
+             <a href="/">\nReturn to the HOME page</a>""")
+    for char in username:
         if char not in ascii_letters and char != " ":
             return HttpResponse("""<h3>Sorry, but the name you entered is invalid!</h3> 
              <a href="/">\nReturn to the HOME page</a>""")
     # Validating language
-    for char in request.POST.get('language'):
-        if not str.isascii(char) and char != " ":
-            return HttpResponse("""<h3>Sorry, but the language you entered is invalid!</h3>  
-              <a href="/">\nReturn to the HOME page</a>""")
+    if not language.isascii() or language == "":
+        return HttpResponse("""<h3>Sorry, but the language you entered is invalid!</h3>  
+          <a href="/">\nReturn to the HOME page</a>""")
         
-    username = request.POST.get('username').title() # Make it so the names users enter are CAPSed right 
-    language = request.POST.get('language')
     user.name = username
     user.language = language
 
@@ -99,8 +109,7 @@ def choose_course(request):
 # I need this view to assign the grade and redirect the user to the main page
 def course_ok(request):
     if not user.name:   # if the user's name is None (the user hasn't logged in)
-        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
-            <a href="/">\nReturn to the HOME page</a>""")
+        return render(request, 'reg_log/please_login.html')
     
     user.set_course(request.POST.get('course')) 
     return HttpResponse(f"""
@@ -111,12 +120,29 @@ def course_ok(request):
 
 def grade(request):
     if not user.name:   # if the user's name is None (the user hasn't logged in)
-        return HttpResponse("""<h3>Please, login from the HOME page!</h3>  
-            <a href="/">\nReturn to the HOME page</a>""")
-    
+        return render(request, 'reg_log/please_login.html')
+
     user.get_grade(randint(1, 100))
     return HttpResponse(f"""
     <h3>Your teacher decided that your grade should be {user.grade}!</h3>
     {"Congratulations!" if user.grade >= 60 else "You could do better."}
     <a href="/">Return to the HOME page</a>
     """)
+  
+
+def show_week(request):
+    """Shows every WeekDay object in a HTML list."""
+    return render(request, 'diary/week.html', {"week": WeekDay.objects.all()})
+
+def show_day(request, day):
+    """Shows every Note for the day `day` if it exists."""
+    try:
+        day = WeekDay.objects.get(pk=day)
+    except ObjectDoesNotExist:
+        raise Http404  # I wanted to raise 404 error not through a shortcut to get better understanding how it works
+    return render(request, 'diary/day.html', {'day': day})
+
+def show_note(request, day, note_id):
+    """Shows specific note that with ID `note_id`."""
+    note = get_object_or_404(Note, pk=note_id) # But here I use a shortcut
+    return render(request, 'diary/note.html', {'note': note})

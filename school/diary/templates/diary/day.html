@@ -1,0 +1,12 @@
+{% extends 'general/base.html' %}
+
+{% block title_appendex %} - {{day.title}} {% endblock title_appendex %}
+
+{% block title %}{{day.title}}:{% endblock title %}
+{% block contents %}
+    <ul>
+    {% for note in day.note_set.all %}
+        <li><a href="note/{{note.id}}/">{{note.title}}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock contents %}
