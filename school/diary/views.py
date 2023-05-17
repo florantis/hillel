@@ -5,7 +5,7 @@ from random import randint
 from .models import WeekDay, Note
 # Since I still don't know how to operate with DBs properly, I use this class as a temporal solution
 class Student():
-    def __init__(self, name = None, language = None):
+    def __init__(self, name=None, language=None):
         self.name = name
         self.language = language
         self.course = ""
