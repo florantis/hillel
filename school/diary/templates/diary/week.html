@@ -1,0 +1,12 @@
+{% extends 'general/base.html' %}
+
+{% block title_appendex %} - My Week{% endblock title_appendex %}
+
+{% block title %}This week:{% endblock title %}
+{% block contents %} 
+    <ul>
+    {% for day in week %}
+        <li><a href="{{day.title}}">{{day.title}}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock contents %}
