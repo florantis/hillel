@@ -6,7 +6,7 @@
 {% block contents %}
     <ul>
     {% for note in day.note_set.all %}
-        <li><a href="/my_week/note{{note.id}}">{{note.title}}</a></li>
+        <li><a href="note/{{note.id}}/">{{note.title}}</a></li>
     {% endfor %}
     </ul>
 {% endblock contents %}

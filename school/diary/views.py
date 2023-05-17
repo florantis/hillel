@@ -24,7 +24,7 @@ def index(request):
     if not user.name:   # if the user's name is None (the user hasn't logged in)
         return HttpResponse(f"""
             <div class="header">    
-                <h1></a href="/">Bibell School</a></h1>
+                <h1>Bibell School</h1>
                 <p><a href="/">Home page</a>- - - -<a href="/my_week/">Diary</a>
             <hr>
             </div>
@@ -137,12 +137,12 @@ def show_week(request):
 def show_day(request, day):
     """Shows every Note for the day `day` if it exists."""
     try:
-        day = WeekDay.objects.get(title=day)
+        day = WeekDay.objects.get(pk=day)
     except ObjectDoesNotExist:
         raise Http404  # I wanted to raise 404 error not through a shortcut to get better understanding how it works
     return render(request, 'diary/day.html', {'day': day})
 
-def show_note(request, note_id):
+def show_note(request, day, note_id):
     """Shows specific note that with ID `note_id`."""
     note = get_object_or_404(Note, pk=note_id) # But here I use a shortcut
     return render(request, 'diary/note.html', {'note': note})
