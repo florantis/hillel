@@ -1,0 +1,15 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}User {{user.username}}{% endblock page_title %}
+
+{% block contents%} 
+<h2>{{user.username}}</h2><hr/>
+<h3>BIO:</h3>{{user.user_bio}}<br/>
+<h3><a href=trophies/> View {{user.username}}'s' trophies</a></h3>
+<h3>Statistics:</h3>
+<ul>
+    <li>Experience: {{user.experience}}</li>
+    <li>Wins: <a href=won_games/>{{user.wins}}</a></li>
+    <li>Losses: {{user.losses}}</li>
+</ul>
+{% endblock contents%}

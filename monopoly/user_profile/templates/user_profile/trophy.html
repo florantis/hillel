@@ -1,0 +1,12 @@
+{% extends 'user_profile/base.html' %}
+{% block page_title %}Trophy Info{% endblock page_title %}
+{% block title %}Trophy Info{% endblock title %}
+
+
+{% block contents%} 
+<h2>{{trophy.type.title}}</h2><hr/>
+{{trophy.type.description}}<br/><br/>
+Owner: <a href=/user/{{trophy.owner.pk}}>{{trophy.owner.username}}</a>
+<h3>Recieved at: {{trophy.time_when_recieved}}</h3>
+
+{% endblock contents%}

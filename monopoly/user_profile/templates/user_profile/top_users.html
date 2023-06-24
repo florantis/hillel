@@ -1,0 +1,11 @@
+{% extends 'user_profile/base.html' %}
+{% block page_title %}Top Players{% endblock page_title %}
+{% block title %}Top Players by experience{% endblock title %}
+
+{% block contents %}
+<ol>
+    {% for user in user_list %}
+    <li> <a href=/user/{{user.pk}}>{{user.username}}</a> ({{user.experience}} XP)
+    {% endfor %}
+</ol>
+{% endblock contents %}

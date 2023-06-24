@@ -1,0 +1,11 @@
+{% extends 'user_profile/base.html' %}
+{% block page_title %}{{user.username}}'s Trophies{% endblock page_title %}
+{% block title %}{{user.username}}'s Trophies{% endblock title %}
+
+{% block contents %}
+<ol>
+    {% for trophy in trophy_list %}
+    <li> <a href={{trophy.type.pk}}>{{trophy.type.title}}
+    {% endfor %}
+</ol>
+{% endblock contents %}
