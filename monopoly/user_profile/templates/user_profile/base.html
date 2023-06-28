@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}BasePage{% endblock page_title %} - Monopoly Best</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Monopoly Best</h1>
+        <a href="/">Home page</a>- - - -<a href="/top_players/">Top players</a>- - - -
+            <a href="/recent_games/">Recent Games</a>
+        <hr>
+    </div>
+
+    <h3>{% block title %}{% endblock title %}</h3>
+    {% block contents %}{% endblock contents %}
+</body>

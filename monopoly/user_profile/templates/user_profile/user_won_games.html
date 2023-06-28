@@ -1,0 +1,11 @@
+{% extends 'user_profile/base.html' %}
+{% block page_title %}Games that {{user.username}} won{% endblock page_title %}
+{% block title %}Games that <a href=../>{{user.username}}</a> won{% endblock title %}
+
+{% block contents %}
+<ol>
+    {% for game in game_list %}
+    <li> <a href=/game/{{game.pk}}>Game-{{game.pk}} ({{game.time_when_started}})
+    {% endfor %}
+</ol>
+{% endblock contents %}
