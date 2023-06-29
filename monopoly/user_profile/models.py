@@ -12,6 +12,13 @@ class User(models.Model):
         return self.username
     
 
+class Commentary(models.Model):
+    owner = models.ForeignKey("User", on_delete=models.CASCADE, related_name="owner")
+    on_page = models.ForeignKey("User", on_delete=models.CASCADE)
+    content = models.CharField(max_length=512)
+    time = models.TimeField(auto_now_add=True)
+
+
 class Game(models.Model):
     time_when_started = models.TimeField()
     number_of_turns = models.IntegerField()
@@ -25,9 +32,19 @@ class GrantedTrophy(models.Model):
     time_when_recieved = models.TimeField()
     owner = models.ForeignKey("User", on_delete=models.CASCADE)
 
+
 class Trophy(models.Model):
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
 
     def __str__(self):
         return self.title
+
+
+class SupportTicket(models.Model):
+    assignee = models.CharField(max_length=100, null=True)
+    email = models.EmailField(max_length=254, null=True)
+    title = models.CharField(max_length=32)
+    message = models.CharField(max_length=512)
+    time_when_posted = models.TimeField(auto_now_add=True)
+    is_open = models.BooleanField(auto_created=True)

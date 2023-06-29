@@ -1,0 +1,27 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}Support{% endblock page_title %}
+{% block title %}User Support Page{% endblock %}
+
+{% block contents %}
+
+<h3>Open tickets:</h3>
+<ul>
+{% for ticket in ticket_list %}
+<li><a href="{% url "support_ticket_info" ticket.pk %}">{{ticket.title}}</a> 
+    by {% if ticket.assignee %}{{ticket.assignee}}{% else %}Anonymous{% endif %}</li> 
+{% endfor %}
+</ul>
+
+<form action="{% url "support_page" %}" method="post">{% csrf_token %}
+    {{form}}
+    {% comment %} <div>
+        <label for="comment">Leave your own comment</label>
+        <input name="comment" id="comment" value="" />
+    </div> {% endcomment %}
+        <button>Post!</button>
+</form>
+
+
+{% endblock contents %}
+

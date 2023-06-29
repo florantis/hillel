@@ -7,8 +7,10 @@
 <body>
     <div class="header">
         <h1>Monopoly Best</h1>
-        <a href="/">Home page</a>- - - -<a href="/top_players/">Top players</a>- - - -
-            <a href="/recent_games/">Recent Games</a>
+        <a href="{% url "index" %}">Home page</a>- - - -
+        <a href="{% url "top_players" %}">Top players</a>- - - -
+        <a href="{% url "recent_games" %}">Recent Games</a>- - - -
+        <a href="{% url "support_page" %}">Support</a>
         <hr>
     </div>
 

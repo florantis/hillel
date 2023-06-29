@@ -3,6 +3,7 @@
 {% block page_title %}User {{user.username}}{% endblock page_title %}
 
 {% block contents%} 
+
 <h2>{{user.username}}</h2><hr/>
 <h3>BIO:</h3>{{user.user_bio}}<br/>
 <h3><a href=trophies/> View {{user.username}}'s' trophies</a></h3>
@@ -12,4 +13,23 @@
     <li>Wins: <a href=won_games/>{{user.wins}}</a></li>
     <li>Losses: {{user.losses}}</li>
 </ul>
+
+</br><hr/>
+<h3>Comment Section</h3>
+{% for comment in comment_list %}
+
+<h4><a href=/user/{{comment.owner.id}}/>{{comment.owner}}</a> - {{comment.time}}</h4>
+{{comment.content}}
+
+{% endfor %}
+<hr/>
+
+
+<form action="{% url "user_comment_success" user.pk %}" method="POST">{% csrf_token %}
+    <div>
+        <label for="comment">Leave your own comment</label>
+        <input name="comment" id="comment" value="" />
+    </div>
+        <button>Post!</button>
+</form>
 {% endblock contents%}
