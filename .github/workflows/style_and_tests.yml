@@ -24,4 +24,4 @@ jobs:
       - name: Install requierments
         run: pip install pytest pytest-django django
       - name: Run the tests
-        run: pytest 
+        run: pytest monopoly
