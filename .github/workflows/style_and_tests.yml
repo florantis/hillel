@@ -4,4 +4,12 @@ on:
   - pull_request
 
 jobs:
-  # - name: d
+  check_style_consistency:
+    name: Check style consistency
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@ver3
+      - name: Install requierements
+        run: pip install flake8 django
+      - name: Execute flake8 linter
+        run: flake8 monopoly/.flake8
