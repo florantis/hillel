@@ -6,6 +6,7 @@ on:
 jobs:
   check_style_consistency:
     name: Check style consistency
+    runs-on: ubuntu
     steps:
       - name: Checkout repository code
         uses: actions/checkout@ver3
