@@ -13,7 +13,7 @@ jobs:
       - name: Install requierements
         run: pip install flake8 django
       - name: Execute flake8 linter
-        run: flake8 monopoly/.flake8
+        run: flake8 --config monopoly/.flake8
 
   run_code_tests:
     name: Run tests for code
