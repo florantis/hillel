@@ -1,25 +1,28 @@
-from typing import Any, Dict
 from django.shortcuts import render
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.urls import reverse
 from .models import User, Game, GrantedTrophy, Trophy, Commentary, SupportTicket
 from .forms import CommentaryForm, SupportTicketForm
 from django.views.generic import FormView, DetailView
 
+
 # Create your views here.
 def index(request):
     return render(request, "user_profile/index.html", {})
 
+
 def top_players(request):
     user_list = list(User.objects.all())
     user_list.sort(reverse=True, key=lambda user: user.experience)
-    return render(request, "user_profile/top_users.html", \
+    return render(request, "user_profile/top_users.html",
                   {"user_list": user_list})
+
 
 def recent_games(request):
     game_list = list(Game.objects.all())[-5:]
     game_list.sort(reverse=True, key=lambda game: game.time_when_started)
     return render(request, "user_profile/recent_games.html", {"game_list": game_list})
+
 
 def view_user_page(request, id):
     player = User.objects.get(pk=id)
@@ -32,6 +35,7 @@ def view_game_info(request, id):
     game = Game.objects.get(pk=id)
     return render(request, "user_profile/game_info.html", {"game": game})
 
+
 def user_won_games(request, id):
     user = User.objects.get(pk=id)
     game_list = Game.objects.filter(winner=user)
@@ -42,6 +46,7 @@ def view_trophies(request, id):
     user = User.objects.get(pk=id)
     trophy_list = GrantedTrophy.objects.filter(owner=user)
     return render(request, "user_profile/user_trophies.html", {"user": user, "trophy_list": trophy_list})
+
 
 def view_granted_trophy(request, user_id, trophy_id):
     user = User.objects.get(pk=user_id)
@@ -60,7 +65,9 @@ def success_comment(request, id):
     else:
         comment = None
 
-    return render(request, "user_profile/commentary_created.html", {"comment": comment, "error_list": form_data.errors, "id": id})
+    return render(request, "user_profile/commentary_created.html", {"comment": comment,
+                                                                    "error_list": form_data.errors,
+                                                                    "id": id})
 
 
 class SupportPage(FormView):
@@ -72,7 +79,7 @@ class SupportPage(FormView):
         context["ticket_list"] = SupportTicket.objects.filter(is_open=True)
 
         return context
-    
+
     def form_valid(self, form):
         SupportTicket.objects.create(assignee=form.cleaned_data["assignee"], email=form.cleaned_data["email"],
                                      message=form.cleaned_data["message"], title=form.cleaned_data["title"],
@@ -82,10 +89,6 @@ class SupportPage(FormView):
     def get_success_url(self):
         return reverse("support_page")
 
-    
+
 class SupportTicketDetail(DetailView):
     model = SupportTicket
-    
-    
-
-

@@ -1,0 +1,7 @@
+name: Running lint and tests.py
+on:
+  - push
+  - pull_request
+
+jobs:
+  # - name: d

@@ -12,7 +12,7 @@ urlpatterns = [
 
     path("user/<int:id>/", views.view_user_page, name="user_page"),
     path("user/<int:id>/won_games/", views.user_won_games, name="user_won_games"),
-    
+
     path("user/<int:id>/trophies/", views.view_trophies, name="user_trophies"),
     path("user/<int:user_id>/trophies/<int:trophy_id>/", views.view_granted_trophy, name="user_trophy"),
 
