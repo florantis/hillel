@@ -1,7 +1,9 @@
 from django.db import models
 
 # Create your models here.
+
 class User(models.Model):
+    """Fields: username, user_bio, experience, wins, losses"""
     username = models.CharField(max_length=24)
     user_bio = models.CharField(max_length=512)
     experience = models.IntegerField()
@@ -13,6 +15,7 @@ class User(models.Model):
     
 
 class Commentary(models.Model):
+    """Fields: owner, on_page, content, time"""
     owner = models.ForeignKey("User", on_delete=models.CASCADE, related_name="owner")
     on_page = models.ForeignKey("User", on_delete=models.CASCADE)
     content = models.CharField(max_length=512)
