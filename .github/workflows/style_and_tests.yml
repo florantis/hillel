@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@ver3
+        uses: actions/checkout@v3
       - name: Install requierements
         run: pip install flake8 django
       - name: Execute flake8 linter
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@ver3
+        uses: actions/checkout@v3
       - name: Install requierments
         run: pip install pytest pytest-django django
       - name: Run the tests
