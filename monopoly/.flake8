@@ -3,4 +3,4 @@ max-line-length = 119
 exclude = 
         user_profile/tests.py,
         user_profile/migrations/,
-        monopoly/.flake8
+        ../school/
