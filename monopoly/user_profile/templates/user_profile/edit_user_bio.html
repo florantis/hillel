@@ -1,0 +1,26 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}Edit BIO{% endblock page_title %}
+{% block title %}Edit BIO{% endblock title %}
+
+{% block contents %}
+
+{% if request.POST %}
+
+<h3>Your bio was changed!</h3>
+Your new bio is next:<br/>
+{{request.POST.bio}}
+{% else %}
+
+<form action="{% url "edit_bio" user.pk %}" method="POST">{% csrf_token %}
+    <div>
+        <label for="bio">Enter your new bio:</label>
+        <input name="bio" id="bio" value="" />
+        {% if errors %}<p><strong>{{ errors }}</strong></p>{% endif %}
+    </div>
+        <button>Update</button>
+</form>
+
+{% endif %}
+<br/><a href={% url 'user_page' user.pk %}>Go back</a>
+{% endblock contents %}

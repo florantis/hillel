@@ -1,11 +1,17 @@
 {% extends 'user_profile/base.html' %}
-{% block page_title %}{{user.username}}'s Trophies{% endblock page_title %}
-{% block title %}{{user.username}}'s Trophies{% endblock title %}
+{% block page_title %}{{user.auth_user.username}}'s Trophies{% endblock page_title %}
+{% block title %}{{user.auth_user.username}}'s Trophies{% endblock title %}
 
 {% block contents %}
+
+{% if trophy_list %}
 <ol>
     {% for trophy in trophy_list %}
     <li> <a href={{trophy.type.pk}}>{{trophy.type.title}}
     {% endfor %}
 </ol>
+{% else %}
+<h4>It's empty here...</h4>
+{% endif %}
+
 {% endblock contents %}

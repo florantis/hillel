@@ -3,14 +3,16 @@ from django.urls import reverse
 import pytest
 from pytest_django.asserts import assertQuerySetEqual
 
-from .models import Commentary, User
+from .models import Commentary, Profile
 
 # Create your tests here.
+
 
 @pytest.mark.urls('user_profile.urls')
 def test_root_page_loads(client):
     response = client.get('/')
     assert response.status_code == 200
+
 
 @pytest.mark.urls('user_profile.urls')
 def test_root_page_has_navigation_bar(client):
@@ -19,10 +21,11 @@ def test_root_page_has_navigation_bar(client):
     for link in [reverse("index"), reverse("top_players"), reverse('recent_games'), reverse('support_page')]:
         assert link.encode('ascii') in response.content  # Converting link into binary
 
+
 @pytest.mark.django_db
 def test_posting_comments_on_user_page(client):
-    user_one = User.objects.create(username='Test1', user_bio='Bio', experience=128, wins=4, losses=8)
-    user_two = User.objects.create(username='Test2', user_bio='Bio', experience=128, wins=4, losses=8)
+    user_one = Profile.objects.create(username='Test1', user_bio='Bio', experience=128, wins=4, losses=8)
+    user_two = Profile.objects.create(username='Test2', user_bio='Bio', experience=128, wins=4, losses=8)
     
     response_no_comments = client.get(reverse("user_page", kwargs={"id": user_one.pk}))
     assert len(response_no_comments.context["comment_list"]) == 0

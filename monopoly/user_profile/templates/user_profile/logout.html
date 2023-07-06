@@ -1,0 +1,22 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}Logout{% endblock page_title %}
+{% block title %}Logout{% endblock title %}
+
+{% block contents %}
+{% if is_anon %}
+You already are logged out!
+{% elif success %}
+You have been successfully logged out!
+</br>
+<a href={% url 'login'%}>Log in</a>
+</br>
+<a href={% url 'register'%}>Register</a>
+{% else %}
+Are you sure?<br/>
+<form action="{% url "logout" %}" method="POST">{% csrf_token %}
+        <button name="confirm" type="submit" value="True">Yes!</button>
+        <button name="confirm" type="submit" value="False">No!</button>
+</form>
+{% endif %}
+{% endblock contents %}

@@ -1,15 +1,21 @@
+from typing import Any, Dict
 from django import forms
-# from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 from .models import SupportTicket
+from django.contrib.auth.models import User as AuthUser
+from django.contrib.auth import authenticate
 
+prohibited_words = {"communism", "ussr"}
 
 class CommentaryForm(forms.Form):
     comment = forms.CharField(min_length=4, max_length=512)
 
     def clean_comment(self):
         data = self.cleaned_data["comment"]
-        if "communism" in data.lower():
-            self.add_error("comment", "You used prohibited words.")
+        
+        for word in prohibited_words:
+            if word in data.lower():
+                self.add_error("comment", "You used prohibited words.")
 
 
 class SupportTicketForm(forms.ModelForm):
@@ -70,3 +76,65 @@ class SupportTicketForm(forms.ModelForm):
             # If one of assignee and email fields is empty and it's not due to them failing validation previously:
             self.add_error("assignee", "Please, provide both your name and email \
                             if you want to leave your credentials.")
+
+
+class RegisterForm(forms.Form):
+    username = forms.CharField(min_length=5, max_length=24, required=True)
+    password = forms.CharField(min_length=8, max_length=128, required=True)
+
+    def clean_username(self):
+        data = self.cleaned_data["username"]
+
+        if AuthUser.objects.filter(username=data):
+            raise ValidationError("The username is already taken!")
+
+        if ' ' in data:
+            raise ValidationError("Your username cannot have spaces in it!")
+
+        return data
+
+    def clean_password(self):
+        data = self.cleaned_data["password"]
+
+        error = True
+        for char in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
+            if char in data:
+                error = False
+                break    
+        if error:
+            raise ValidationError("Your password must contain numbers!")
+
+        if ' ' in data:
+            raise ValidationError("Your password cannot have spaces in it!")
+
+        return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("username") and cleaned_data.get("password"):
+            if cleaned_data.get("username").lower() in cleaned_data.get("password").lower():
+                raise("You can't include you username into the password!")
+        
+        return cleaned_data
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=24, required=True)
+    password = forms.CharField(max_length=250, required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        authenticate(username=cleaned_data.get('username'))
+
+        return cleaned_data
+
+class BioForm(forms.Form):
+    bio = forms.CharField(max_length=512)
+
+    def clean_bio(self):
+        data = self.cleaned_data["bio"]
+
+        for word in prohibited_words:
+            if word in data.lower():
+                raise ValidationError("You used prohibited words.")
