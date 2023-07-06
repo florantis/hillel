@@ -1,6 +1,7 @@
 from django import forms
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from .models import SupportTicket
+
 
 class CommentaryForm(forms.Form):
     comment = forms.CharField(min_length=4, max_length=512)
@@ -9,6 +10,7 @@ class CommentaryForm(forms.Form):
         data = self.cleaned_data["comment"]
         if "communism" in data.lower():
             self.add_error("comment", "You used prohibited words.")
+
 
 class SupportTicketForm(forms.ModelForm):
     assignee = forms.CharField(min_length=5, max_length=100, required=False)
@@ -21,24 +23,24 @@ class SupportTicketForm(forms.ModelForm):
     def clean_assignee(self):
         data = self.cleaned_data.get("assignee").split(" ")
         if not data[0]:
-            return 
+            return
 
         if len(data) < 2:
             # If there are less than 2 words
             self.add_error("assignee", "Please, enter your real name.")
-            return 
+            return
 
         for word in data:
             # If some word starts with lowercase
             if list(word)[0] == list(word)[0].lower():
                 self.add_error("assignee", "Please, enter your real name.")
-                return 
+                return
 
         for num in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
             # If there are number in the name
             if str(num) in data:
                 self.add_error("assignee", "Please, enter your real name.")
-                return 
+                return
 
         return self.cleaned_data.get("assignee")
 
@@ -46,7 +48,7 @@ class SupportTicketForm(forms.ModelForm):
         email = self.cleaned_data.get("email")
         if not email:
             return None
-        
+
         if len(email.split("@")) != 2:
             # If '@' char doesn't split email in two pieces (you@gmail.com)
             self.add_error("email", "You entered invalid email.")
@@ -61,10 +63,10 @@ class SupportTicketForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        
-        if (cleaned_data["assignee"] and not cleaned_data["email"] or \
-        not cleaned_data["assignee"] and cleaned_data["email"]) and not \
-        (self.has_error("assignee") or self.has_error("email")):
-            # If one of assignee and email fields is empty and it's not due to them failing validation previously: 
-            self.add_error("assignee", "Please, provide both your name and email if you want to leave your credentials.")
-        
+
+        if (cleaned_data["assignee"] and not cleaned_data["email"] or
+                not cleaned_data["assignee"] and cleaned_data["email"]) and not \
+                (self.has_error("assignee") or self.has_error("email")):
+            # If one of assignee and email fields is empty and it's not due to them failing validation previously:
+            self.add_error("assignee", "Please, provide both your name and email \
+                            if you want to leave your credentials.")

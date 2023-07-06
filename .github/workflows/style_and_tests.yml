@@ -1,0 +1,27 @@
+name: Running lint and tests.py
+on:
+  - push
+  - pull_request
+
+jobs:
+  check_style_consistency:
+    name: Check style consistency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+      - name: Install requierements
+        run: pip install flake8 django
+      - name: Execute flake8 linter
+        run: flake8 --config monopoly/.flake8
+
+  run_code_tests:
+    name: Run tests for code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+      - name: Install requierments
+        run: pip install pytest pytest-django django
+      - name: Run the tests
+        run: pytest monopoly

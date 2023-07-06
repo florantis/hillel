@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class User(models.Model):
     """Fields: username, user_bio, experience, wins, losses"""
     username = models.CharField(max_length=24)
@@ -12,7 +13,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
-    
+
 
 class Commentary(models.Model):
     """Fields: owner, on_page, content, time"""
