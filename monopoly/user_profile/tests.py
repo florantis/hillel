@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 import pytest
 from pytest_django.asserts import assertQuerySetEqual
+from django.contrib.auth.models import User as AuthUser
 
 from .models import Commentary, Profile
 
@@ -24,23 +25,28 @@ def test_root_page_has_navigation_bar(client):
 
 @pytest.mark.django_db
 def test_posting_comments_on_user_page(client):
-    user_one = Profile.objects.create(username='Test1', user_bio='Bio', experience=128, wins=4, losses=8)
-    user_two = Profile.objects.create(username='Test2', user_bio='Bio', experience=128, wins=4, losses=8)
-    
+    new_user = AuthUser.objects.create_user(username="User1", password="User1")
+    new_user.save()
+    user_one = Profile.objects.create(auth_user=new_user, user_bio='Bio', experience=128, wins=4, losses=8)
+
+    new_user = AuthUser.objects.create_user(username="User2", password="User2")
+    new_user.save()
+    user_two = Profile.objects.create(auth_user=new_user, user_bio='Bio', experience=128, wins=4, losses=8)
+
     response_no_comments = client.get(reverse("user_page", kwargs={"id": user_one.pk}))
     assert len(response_no_comments.context["comment_list"]) == 0
 
-    Commentary.objects.create(owner=user_two, on_page=user_one, content="Comment 1")
-    Commentary.objects.create(owner=user_two, on_page=user_one, content="Comment 2")
-    Commentary.objects.create(owner=user_two, on_page=user_one, content="Comment 3")
+    Commentary.objects.create(owner=user_two.auth_user, on_page=user_one.auth_user, content="Comment 1")
+    Commentary.objects.create(owner=user_two.auth_user, on_page=user_one.auth_user, content="Comment 2")
+    Commentary.objects.create(owner=user_two.auth_user, on_page=user_one.auth_user, content="Comment 3")
     # Next comment is on other person's page
-    Commentary.objects.create(owner=user_one, on_page=user_two, content="Comment on other page")
+    Commentary.objects.create(owner=user_one.auth_user, on_page=user_two.auth_user, content="Comment on other page")
 
     response_three_comments = client.get(reverse("user_page", kwargs={"id": user_one.pk}))
-    db_three_comments = Commentary.objects.filter(on_page=user_one)
+    db_three_comments = Commentary.objects.filter(on_page=user_one.auth_user)
 
     response_one_comment = client.get(reverse("user_page", kwargs={"id": user_two.pk}))
-    db_one_comment = Commentary.objects.filter(on_page=user_two)
+    db_one_comment = Commentary.objects.filter(on_page=user_two.auth_user)
 
     assertQuerySetEqual(response_three_comments.context["comment_list"], db_three_comments, ordered=False)
     assertQuerySetEqual(response_one_comment.context["comment_list"], db_one_comment, ordered=False)

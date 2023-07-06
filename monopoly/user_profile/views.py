@@ -49,6 +49,7 @@ def user_won_games(request, id):
 def edit_user_bio(request, id):
     context = {}
     if request.user.pk != id:
+        # if user tries to edit somebody's bio
         raise Http404
 
     if request.POST:
@@ -117,6 +118,7 @@ def register(request):
     if request.POST:
         form_data = RegisterForm(request.POST)
         context["errors"] = form_data.errors
+
         if form_data.is_valid():
             new_user = AuthUser.objects.create_user(username=form_data.cleaned_data['username'],
                                                     password=form_data.cleaned_data['password'])
@@ -149,6 +151,7 @@ def logout(request):
     context = {}
     if request.user.is_authenticated:
         if request.POST:
+            # if user previously pressed the confirmation button
             if request.POST.get("confirm") == "True":
                 logout_user(request)
                 context["success"] = True
