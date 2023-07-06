@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import SupportTicket
@@ -7,12 +6,13 @@ from django.contrib.auth import authenticate
 
 prohibited_words = {"communism", "ussr"}
 
+
 class CommentaryForm(forms.Form):
     comment = forms.CharField(min_length=4, max_length=512)
 
     def clean_comment(self):
         data = self.cleaned_data["comment"]
-        
+
         for word in prohibited_words:
             if word in data.lower():
                 self.add_error("comment", "You used prohibited words.")
@@ -100,7 +100,7 @@ class RegisterForm(forms.Form):
         for char in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
             if char in data:
                 error = False
-                break    
+                break
         if error:
             raise ValidationError("Your password must contain numbers!")
 
@@ -113,8 +113,8 @@ class RegisterForm(forms.Form):
         cleaned_data = super().clean()
         if cleaned_data.get("username") and cleaned_data.get("password"):
             if cleaned_data.get("username").lower() in cleaned_data.get("password").lower():
-                raise("You can't include you username into the password!")
-        
+                raise ValidationError("You can't include you username into the password!")
+
         return cleaned_data
 
 
@@ -128,6 +128,7 @@ class LoginForm(forms.Form):
         authenticate(username=cleaned_data.get('username'))
 
         return cleaned_data
+
 
 class BioForm(forms.Form):
     bio = forms.CharField(max_length=512)

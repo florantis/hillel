@@ -5,9 +5,9 @@ from django.db import models
 
 class Profile(models.Model):
     """Fields: auth_user, username, user_bio, experience, wins, losses"""
-    # 
+    #
     # I don't know how to integrate all this into auth.user model, so I bind these two
-    # 
+    #
     auth_user = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     # username = models.CharField(max_length=24)
     user_bio = models.CharField(max_length=512)

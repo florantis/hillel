@@ -46,6 +46,7 @@ def user_won_games(request, id):
     game_list = Game.objects.filter(winner=user)
     return render(request, "user_profile/user_won_games.html", {"game_list": game_list, "user": user})
 
+
 def edit_user_bio(request, id):
     context = {}
     if request.user.pk != id:
@@ -57,8 +58,8 @@ def edit_user_bio(request, id):
         user.user_bio = request.POST.get("bio")
         user.save()
         context["success"] = True
-    
-    return render(request, "user_profile\edit_user_bio.html", context)
+
+    return render(request, "user_profile/edit_user_bio.html", context)
 
 
 def view_trophies(request, id):
@@ -143,7 +144,6 @@ def login(request):
         else:
             context["errors"] = 'Wrong login or password!'
 
-
     return render(request, 'user_profile/login.html', context)
 
 
@@ -159,7 +159,7 @@ def logout(request):
                 return redirect(reverse("index"))
         else:
             pass
-        
+
     else:
         context['is_anon'] = True
 
