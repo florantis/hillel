@@ -1,0 +1,32 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}
+{% if comment %}
+Comment posted successfully!
+{% else %}
+Comment wasn't posted!
+{% endif %}
+{% endblock page_title %}
+
+
+{% block title %}
+{% if comment %}
+Comment posted successfully!
+{% else %}
+Comment wasn't posted!
+{% endif %}
+{% endblock title %}
+
+
+{% block contents %}
+
+{% if comment %}
+<h3>Your comment:</h3>
+{{comment.content}}
+{% else %}
+{{error_list}}
+{% endif %}
+
+<h3><a href={% url "user_page" id %}>Go back</h3>
+
+{% endblock contents %}

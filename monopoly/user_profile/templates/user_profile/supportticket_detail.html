@@ -1,0 +1,18 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}Support Ticket #{{object.pk}}{% endblock page_title %}
+{% block title %}Support Ticket #{{object.pk}}{% endblock title %}
+
+{% block contents %}
+<h4>
+    Assignee: {% if object.assignee %}{{object.assignee}}{% else %}Anonymous{% endif %}
+    {% if object.email %}(email: {{object.email}}){% endif %}</br>
+    posted at {{object.time_when_posted}}
+</h4> 
+<h2>{{object.title}}</h2>
+{{object.message}}
+
+
+{% endblock contents %}
+
+
