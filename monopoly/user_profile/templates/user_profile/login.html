@@ -1,0 +1,26 @@
+{% extends 'user_profile/base.html' %}
+
+{% block page_title %}Login{% endblock page_title %}
+{% block title %}Login Page{% endblock title %}
+
+{% block contents %}
+
+{% if not user.username %}
+<form action="{% url "login" %}" method="POST">{% csrf_token %}
+    <div>
+        <label for="username">Username</label>
+        <input name="username" id="username" value="" />
+        <label for="password">Password</label>
+        <input name="password" id="password" value="" />
+        {% if errors %}<p><strong>{{ errors }}</strong></p>{% endif %}
+    </div>
+        <button>Log in!</button>
+        {{ form.message.errors }}
+</form>
+{% else %}
+<h3>Congratulations!</h3>
+You successfully logged in as {{user.username}}
+{% endif %}
+
+{% endblock contents %}
+

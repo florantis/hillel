@@ -3,22 +3,26 @@ from django.db import models
 # Create your models here.
 
 
-class User(models.Model):
-    """Fields: username, user_bio, experience, wins, losses"""
-    username = models.CharField(max_length=24)
+class Profile(models.Model):
+    """Fields: auth_user, username, user_bio, experience, wins, losses"""
+    #
+    # I don't know how to integrate all this into auth.user model, so I bind these two
+    #
+    auth_user = models.ForeignKey("auth.user", on_delete=models.CASCADE)
+    # username = models.CharField(max_length=24)
     user_bio = models.CharField(max_length=512)
     experience = models.IntegerField()
     wins = models.IntegerField()
     losses = models.IntegerField()
 
     def __str__(self):
-        return self.username
+        return self.auth_user.username
 
 
 class Commentary(models.Model):
     """Fields: owner, on_page, content, time"""
-    owner = models.ForeignKey("User", on_delete=models.CASCADE, related_name="owner")
-    on_page = models.ForeignKey("User", on_delete=models.CASCADE)
+    owner = models.ForeignKey("auth.user", on_delete=models.CASCADE, related_name="owner")
+    on_page = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     content = models.CharField(max_length=512)
     time = models.TimeField(auto_now_add=True)
 
@@ -28,13 +32,13 @@ class Game(models.Model):
     number_of_turns = models.IntegerField()
     # Did game end early? (e.g if everyone left)
     ended_early = models.BooleanField()
-    winner = models.ForeignKey("User", on_delete=models.CASCADE)
+    winner = models.ForeignKey("auth.user", on_delete=models.CASCADE)
 
 
 class GrantedTrophy(models.Model):
     type = models.ForeignKey("Trophy", on_delete=models.CASCADE)
     time_when_recieved = models.TimeField()
-    owner = models.ForeignKey("User", on_delete=models.CASCADE)
+    owner = models.ForeignKey("auth.user", on_delete=models.CASCADE)
 
 
 class Trophy(models.Model):

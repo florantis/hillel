@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import User, Game, GrantedTrophy, Trophy, Commentary, SupportTicket
+from .models import Profile, Game, GrantedTrophy, Trophy, Commentary, SupportTicket
 # Register your models here.
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "experience", "wins", "losses")
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("auth_user", "experience", "wins", "losses")
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -27,7 +27,7 @@ class SupportTicketAdmin(admin.ModelAdmin):
     list_display = ("assignee", "title")
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Trophy, TrophyAdmin)
 admin.site.register(GrantedTrophy, GrantedTrophyAdmin)
