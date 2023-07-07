@@ -33,20 +33,17 @@ class SupportTicketForm(forms.ModelForm):
 
         if len(data) < 2:
             # If there are less than 2 words
-            self.add_error("assignee", "Please, enter your real name.")
-            return
+            raise ValidationError("Please, enter your real name.")
 
         for word in data:
             # If some word starts with lowercase
             if list(word)[0] == list(word)[0].lower():
-                self.add_error("assignee", "Please, enter your real name.")
-                return
+                raise ValidationError("Please, enter your real name.")
 
-        for num in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
+        for num in range(10):
             # If there are number in the name
             if str(num) in data:
-                self.add_error("assignee", "Please, enter your real name.")
-                return
+                raise ValidationError("Please, enter your real name.")
 
         return self.cleaned_data.get("assignee")
 
@@ -97,8 +94,8 @@ class RegisterForm(forms.Form):
         data = self.cleaned_data["password"]
 
         error = True
-        for char in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
-            if char in data:
+        for char in range(10):
+            if str(char) in data:
                 error = False
                 break
         if error:
